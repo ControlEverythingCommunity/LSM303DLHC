@@ -99,9 +99,9 @@ void main()
 	}
 
 	// Output data to screen
-	printf("Rotation in X-Axis : %d \n", xAccl);
-	printf("Rotation in Y-Axis : %d \n", yAccl);
-	printf("Rotation in Z-Axis : %d \n", zAccl);
+	printf("Acceleration in X-Axis : %d \n", xAccl);
+	printf("Acceleration in Y-Axis : %d \n", yAccl);
+	printf("Acceleration in Z-Axis : %d \n", zAccl);
 
 	// Get I2C device, LSM303DLHC MAGNETO I2C address is 0x1E(30)
 	ioctl(file, I2C_SLAVE, 0x1E);
