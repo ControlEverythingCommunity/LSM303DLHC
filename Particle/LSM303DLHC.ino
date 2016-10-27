@@ -12,7 +12,7 @@
 // LSM303DLHC magnetometer I2C address is 0x1E(30)
 #define Addr_Mag 0x1E
 
-int xAccl = 0, yAccl =  0, zAccl = 0,  xMag = 0, yMag = 0, zMag = 0;
+int xAccl = 0, yAccl = 0, zAccl = 0, xMag = 0, yMag = 0, zMag = 0;
 void setup()
 {
     // Set variable
