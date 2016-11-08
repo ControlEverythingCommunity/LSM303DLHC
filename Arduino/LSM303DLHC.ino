@@ -32,7 +32,7 @@ void loop()
   Wire.write(0x27);
   // Stop I2C transmission
   Wire.endTransmission();
- 
+
   // Start I2C transmission
   Wire.beginTransmission(Addr_Accl);
   // Select control register 4
@@ -41,43 +41,40 @@ void loop()
   Wire.write(0x00);
   // Stop I2C transmission
   Wire.endTransmission();
-  
-  for(int i = 0; i < 6; i++)
-  { 
+
+  for (int i = 0; i < 6; i++)
+  {
     // Start I2C Transmission
     Wire.beginTransmission(Addr_Accl);
     // Select data register
-    Wire.write((40+i));
+    Wire.write((40 + i));
     // Stop I2C Transmission
     Wire.endTransmission();
-    
-    // Request 6 byte of data from the device
+
+    // Request 6 byte of data
     // xAccl lsb, xAccl msb, yAccl lsb, yAccl msb, zAccl lsb, zAccl msb
     Wire.requestFrom(Addr_Accl, 1);
-    
-    if(Wire.available() == 1)
+
+    if (Wire.available() == 1)
     {
       data[i] = Wire.read();
     }
   }
-  
+
   // Convert the data
   int xAccl =  (data[1] * 256) + data[0];
   int yAccl =  (data[3] * 256) + data[2];
-  int zAccl =  (data[5] * 256) + data[6];
-  
+  int zAccl =  (data[5] * 256) + data[4];
+
   // Output data to serial monitor
   Serial.print("Acceleration in X-Axis : ");
-  Serial.print(xAccl); 
-  Serial.println(" g"); 
+  Serial.println(xAccl);
   Serial.print("Acceleration in Y-Axis : ");
-  Serial.print(yAccl);
-  Serial.println(" g"); 
+  Serial.println(yAccl);
   Serial.print("Acceleration in Z-Axis : ");
-  Serial.print(zAccl);
-  Serial.println(" g");
+  Serial.println(zAccl);
   delay(1000);
-  
+
   // Start I2C Transmission
   Wire.beginTransmission(Addr_Mag);
   // Select Mode select register
@@ -86,7 +83,16 @@ void loop()
   Wire.write(0x00);
   // Stop I2C Transmission
   Wire.endTransmission();
-  
+
+  // Start I2C Transmission
+  Wire.beginTransmission(Addr_Mag);
+  // Select CRA register
+  Wire.write(0x00);
+  // Temperatuer disabled, Data output rate = 15Hz
+  Wire.write(0x10);
+  // Stop I2C Transmission
+  Wire.endTransmission();
+
   // Start I2C Transmission
   Wire.beginTransmission(Addr_Mag);
   // Select gain configuration register
@@ -96,35 +102,35 @@ void loop()
   // Stop I2C Transmission
   Wire.endTransmission();
 
-  for(int i = 0; i < 6; i++)
-  { 
+  for (int i = 0; i < 6; i++)
+  {
     // Start I2C Transmission
     Wire.beginTransmission(Addr_Mag);
     // Select data register
-    Wire.write((3+i));
+    Wire.write((3 + i));
     // Stop I2C Transmission
     Wire.endTransmission();
-    
+
     // Request 6 byte of data
     // xAccl lsb, xAccl msb, yAccl lsb, yAccl msb, zAccl lsb, zAccl msb
     Wire.requestFrom(Addr_Mag, 1);
-    
-    if(Wire.available() == 1)
+
+    if (Wire.available() == 1)
     {
       data[i] = Wire.read();
     }
   }
-  
+
   // Convert the data
-  int xMag =  (data[1] * 256) + data[0];
-  int yMag =  (data[5] * 256) + data[4];
-  int zMag =  (data[3] * 256) + data[2];
-  
+  int xMag =  (data[0] * 256) + data[1];
+  int yMag =  (data[4] * 256) + data[5];
+  int zMag =  (data[2] * 256) + data[3];
+
   // Output data to serial monitor
   Serial.print("Magnetic Field in X-Axis: ");
-  Serial.println(xMag);  
+  Serial.println(xMag);
   Serial.print("Magnetic Field in Y-Axis: ");
-  Serial.println(yMag); 
+  Serial.println(yMag);
   Serial.print("Magnetic Field in Z-Axis: ");
   Serial.println(zMag);
   delay(1000);
