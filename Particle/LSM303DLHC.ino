@@ -102,6 +102,15 @@ void loop()
     
     // Start I2C Transmission
     Wire.beginTransmission(Addr_Mag);
+    // Select CRA register
+    Wire.write(0x00);
+    // Temperatuer disabled, Data output rate = 15Hz
+    Wire.write(0x10);
+    // Stop I2C Transmission
+    Wire.endTransmission();
+    
+    // Start I2C Transmission
+    Wire.beginTransmission(Addr_Mag);
     // Select gain configuration register
     Wire.write(0x01);
     // Gain +/-1.3
@@ -130,17 +139,17 @@ void loop()
     delay(300);
     
     // Convert the data
-    xMag = ((data[1] * 256) + data[0]);
+    xMag = ((data[0] * 256) + data[1]);
     if(xMag > 32767)
     {
       xMag -= 65536;
     }
-    yMag = ((data[3] * 256) + data[2]);
+    yMag = ((data[4] * 256) + data[5]);
     if(yMag > 32767)
     {
       yMag -= 65536;
     }
-    zMag = ((data[5] * 256) + data[4]);
+    zMag = ((data[2] * 256) + data[3]);
     if(zMag > 32767)
     {
       zMag -= 65536;
